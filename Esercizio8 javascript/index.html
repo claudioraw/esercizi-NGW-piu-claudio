@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Meteo</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+            #weather {
+                margin-top: 20px;
+            }
+            img {
+                max-width: 100px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Controlla il Meteo</h1>
+
+        <form id="weatherForm">
+            <label for="city">Inserisci la città:</label>
+            <input type="text" id="city" required>
+            <button type="submit">Mostra Meteo</button>
+        </form>
+        <div id="weather"></div>
+
+        <script>
+            const apiKey = // registrarsi sul seguente sito https://www.weatherapi.com/ e copiare qui la propria key API per proseguire;
+
+            async function getWeather() {
+                let input = document.getElementById('city').value;
+                let risposta = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${input}&lang=it`);
+            
+                if (!risposta.ok) {
+                    throw new Error('Città non trovata');
+                }
+
+                let data = await risposta.json();
+                creaCardMeteo(data);
+                }
+
+            function creaCardMeteo(data) {
+                const weatherDiv = document.getElementById('weather');
+                const weatherIcon = `https:${data.current.condition.icon}`;
+                console.log("URL dell'icona:", weatherIcon);
+                weatherDiv.innerHTML = `
+                <h2>Meteo a ${data.location.name}, ${data.location.country}</h2>
+                <p>Temperatura: ${data.current.temp_c} °C</p>
+                <p>Condizione: ${data.current.condition.text}</p>
+                <p>Umidità: ${data.current.humidity}%</p>
+                <img src="${weatherIcon}" alt="Icona meteo">
+    `           ;
+            }
+
+
+            document.getElementById('weatherForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                getWeather().catch(error => {
+                    const weatherDiv = document.getElementById('weather');
+                    weatherDiv.innerHTML = `<p style="color: red;">${error.message}</p>`;
+                });
+            });
+        </script>
+    </body>
+</html>
