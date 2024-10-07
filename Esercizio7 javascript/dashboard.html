@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>theMealDB</title>
+        <script>
+            if(localStorage.getItem("utente") == null) {
+                window.location.href = "index.html";
+            }
+        </script>
+    </head>
+    <body>
+        <header>
+
+        </header>
+        <main>
+            <h2>Benvenuto <span id="nome-utente">X</span></h2>
+            <button onclick="logout_to_index()">Logout</button>
+
+            <button onclick="richiesta_async()">Cerca un piatto</button>
+
+            <section id="sezione-piatti"></section>
+        </main>
+        <footer>
+
+        </footer>
+        <script>
+            function logout_to_index() {
+                localStorage.removeItem("utente");
+                window.location.href = "index.html";
+            }
+
+            let utente = JSON.parse(localStorage.getItem("utente"));
+            document.getElementById("nome-utente").innerHTML = utente.username + " " + utente.password;
+
+            function crea_card_piatti(lista_di_piatti) {
+                console.log("Query con risultati: " + lista_di_piatti.length);
+                document.getElementById("sezione-piatti").innerHTML = "";
+
+                for (let i = 0; i < lista_di_piatti.length; i++) {
+                    let div = document.createElement("div");
+
+                    let hNomePiatto = document.createElement("h3");
+                    hNomePiatto.innerHTML = lista_di_piatti[i].strMeal;
+
+                    let imagePiatto = document.createElement("img");
+                    imagePiatto.src = lista_di_piatti[i].strMealThumb;
+                    imagePiatto.width = 300;
+                    imagePiatto.height = 200;
+
+                    let instrPiatto = document.createElement("p");
+                    instrPiatto.innerHTML = lista_di_piatti[i].strInstructions;
+
+                    div.appendChild(hNomePiatto);
+                    div.appendChild(imagePiatto);
+                    div.appendChild(instrPiatto);
+
+                    document.getElementById("sezione-piatti").appendChild(div);
+                }
+            }
+
+            async function richiesta_async() {
+                let input = prompt("Quale piatto vuoi cercare?");
+                let risposta = await fetch(
+                    `https://www.themealdb.com/api/json/v1/1/search.php?s=${input}`
+                );
+
+                let lista_piatti = await risposta.json();
+                console.log(lista_piatti.meals);
+                crea_card_piatti(lista_piatti.meals);
+            }
+        </script>
+    </body>
+</html>
