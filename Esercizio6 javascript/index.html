@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Registrazione</title>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Roboto', sans-serif;
+                background-color: #f0f4f8;
+                color: #333;
+                margin: 0;
+                padding: 20px;
+            }
+
+            h1 {
+                text-align: center;
+                color: #4a90e2;
+            }
+
+            form {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                max-width: 400px;
+                margin: 20px auto;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            input {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                transition: border-color 0.3s;
+            }
+
+            input:focus {
+                border-color: #4a90e2;
+                outline: none;
+            }
+
+            button {
+                width: 100%;
+                padding: 10px;
+                background-color: #4a90e2;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background-color 0.3s;
+            }
+
+            button:hover {
+                background-color: #357ab8;
+            }
+
+            .error {
+                color: red;
+                text-align: center;
+                margin-top: 10px;
+            }
+
+            #welcomeMessage {
+                display: none;
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                max-width: 400px;
+                margin: 20px auto;
+            }
+
+            ul {
+                list-style-type: none;
+                padding: 0;
+            }
+
+            li {
+                padding: 5px 0;
+                border-bottom: 1px solid #eee;
+            }
+
+            li:last-child {
+                border-bottom: none;
+            }
+        </style>
+    </head>
+    <body>
+
+        <h1>Registrati</h1>
+        <form id="registrationForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" required>
+
+            <label for="cognome">Cognome:</label>
+            <input type="text" id="cognome" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+
+            <button type="submit">Registrati</button>
+            <p class="error" id="error"></p>
+        </form>
+
+        <div id="welcomeMessage">
+            <h1>Benvenuto!</h1>
+            <ul id="userData"></ul>
+        </div>
+
+        <script>
+            document.getElementById('registrationForm').addEventListener('submit', function(event) {
+                event.preventDefault(); 
+                const email = document.getElementById('email').value.trim();
+                const nome = document.getElementById('nome').value.trim();
+                const cognome = document.getElementById('cognome').value.trim();
+                const password = document.getElementById('password').value.trim();
+                const errorMessage = document.getElementById('error');
+                const userData = document.getElementById('userData');
+                const welcomeMessage = document.getElementById('welcomeMessage');
+
+                errorMessage.textContent = '';
+
+                if (!email || !nome || !cognome || !password) {
+                    errorMessage.textContent = 'Tutti i campi sono obbligatori!';
+                    return;
+                }
+
+                userData.innerHTML = `
+                    <li>Email: ${email}</li>
+                    <li>Nome: ${nome}</li>
+                    <li>Cognome: ${cognome}</li>
+                `;
+                welcomeMessage.style.display = 'block';
+
+                this.reset();
+            });
+        </script>
+
+    </body>
+</html>
